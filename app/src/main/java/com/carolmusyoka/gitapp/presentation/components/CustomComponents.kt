@@ -89,6 +89,6 @@ fun LoadingLottieAnimation(){
 }
 
 @Composable
-fun UserCard(){
-    
+fun UserInfo(){
+
 }
