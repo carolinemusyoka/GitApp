@@ -20,6 +20,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.carolmusyoka.gitapp.presentation.components.CustomTopBar
+import com.carolmusyoka.gitapp.presentation.components.LoadingLottieAnimation
 import com.carolmusyoka.gitapp.presentation.theme.lightblack
 import com.carolmusyoka.gitapp.presentation.theme.lightbox
 import com.carolmusyoka.gitapp.presentation.theme.subTitleTextColor
@@ -45,11 +46,14 @@ fun HomeScreen(
             // Search Section
             SearchSection(navToUser)
 
+            ResultSection()
+
             // Results Section
         }
     }
 
 }
+
 
 @Composable
 fun SearchSection(navToUser: () -> Unit) {
@@ -138,4 +142,10 @@ fun SearchSection(navToUser: () -> Unit) {
         }
 
     }
+}
+
+@Composable
+fun ResultSection() {
+    Spacer(modifier = Modifier.padding(30.dp))
+    LoadingLottieAnimation()
 }
