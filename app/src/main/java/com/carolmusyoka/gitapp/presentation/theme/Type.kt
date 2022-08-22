@@ -1,4 +1,4 @@
-package com.carolmusyoka.gitapp.ui.theme
+package com.carolmusyoka.gitapp.presentation.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
