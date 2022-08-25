@@ -2,18 +2,18 @@ package com.carolmusyoka.gitapp.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,13 +22,22 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.carolmusyoka.gitapp.data.model.GetUserResponse
+import com.carolmusyoka.gitapp.navigation.PagerItem
+import com.carolmusyoka.gitapp.presentation.components.FollowersCard
+import com.carolmusyoka.gitapp.presentation.viewmodel.FollowersViewModel
+import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
+import com.google.accompanist.pager.*
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class, ExperimentalPagerApi::class)
 @Composable
-fun UserDetailsScreen(userResponse: GetUserResponse) {
+fun UserDetailsScreen(userResponse: GetUserResponse, userViewModel: UserViewModel = hiltViewModel(), followersViewModel: FollowersViewModel = hiltViewModel()) {
+    val tabs = listOf(PagerItem.Followers, PagerItem.Following, PagerItem.Repositories, PagerItem.Gists)
+    val pagerState = rememberPagerState()
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -182,7 +191,93 @@ fun UserDetailsScreen(userResponse: GetUserResponse) {
                     fontSize = TextUnit(value = 14F, type = TextUnitType.Sp),
                 )
             }
+            Tabs(tabs = tabs, pagerState = pagerState)
+            TabsContent(tabs = tabs, pagerState = pagerState, userViewModel, followersViewModel, userResponse.login ?: "")
         }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun TabsContent(tabs: List<PagerItem>, pagerState: PagerState, userViewModel: UserViewModel, followersViewModel: FollowersViewModel, username: String) {
+    val scrollState = rememberScrollState()
+
+    val followers = remember{
+        followersViewModel.getFollowers(username)
+        followersViewModel.followers
+    }.collectAsState()
+    HorizontalPager(state = pagerState, count = tabs.size) { page ->
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (page == 0){
+                LazyColumn {
+                    when{
+                        followers.value.isLoading -> {
+
+                        }
+                        followers.value.data != null ->{
+                            items(followers.value.data!!.size){ follower ->
+                                followers.value.data?.get(follower)?.let {
+                                    FollowersCard(it)
+                                }
+                            }
+                        }
+                        followers.value.error ->{
+
+                        }
+                    }
+                }
+            }
+
+//            Text(
+//                text = tabs[currentPage].title,
+//                style = MaterialTheme.typography.h2
+//            )
+//            Spacer(modifier = Modifier.height(10.dp))
+//            Text(
+//                text = tabs[currentPage].title,
+//                style = MaterialTheme.typography.h4
+//            )
+//            Spacer(modifier = Modifier.height(10.dp))
+//            Text(
+//                text = tabs[currentPage].title,
+//                style = MaterialTheme.typography.body1
+//            )
+        }
+    }
+}
+//        tabs[page].screen
+
+
+@OptIn(ExperimentalPagerApi::class, ExperimentalUnitApi::class)
+@Composable
+fun Tabs(tabs: List<PagerItem>, pagerState: PagerState) {
+    val scope = rememberCoroutineScope()
+    TabRow(selectedTabIndex = pagerState.currentPage,
+        backgroundColor = Color.White,
+        contentColor = Color.Black,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                color = Color.Black,
+            )
+        }
+    ) {
+        tabs.forEachIndexed { index, tab ->
+            Tab(
+                text = { Text(text = tab.title ,maxLines = 1,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = TextUnit(value = 10F, type = TextUnitType.Sp)) },
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
+            )
+        }
+    }
 }
 
 @Preview
@@ -222,4 +317,18 @@ fun PreviewDetailScreen(){
             updated_at = "2020-01-01T00:00:00Z",
             url = "https://api.github.com/users/octocat")
     )
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Preview(showBackground = true)
+@Composable
+fun TabsPreview() {
+    val tabs = listOf(
+        PagerItem.Followers,
+        PagerItem.Following,
+        PagerItem.Repositories,
+        PagerItem.Gists
+    )
+    val pagerState = rememberPagerState()
+    Tabs(tabs = tabs, pagerState = pagerState)
 }

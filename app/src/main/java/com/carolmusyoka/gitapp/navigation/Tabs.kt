@@ -14,9 +14,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.carolmusyoka.gitapp.presentation.screens.FollowingScreen
 import com.carolmusyoka.gitapp.presentation.screens.HomeScreen
 import com.carolmusyoka.gitapp.presentation.screens.ProfileScreen
-import com.carolmusyoka.gitapp.presentation.screens.SearchScreen
 
 enum class HomeTabs(
     val title: String,
@@ -40,7 +40,7 @@ fun NavGraphBuilder.addHomeGraph(
         )
     }
     composable(HomeTabs.SEARCH.route){
-        SearchScreen(
+        FollowingScreen(
 
         )
     }

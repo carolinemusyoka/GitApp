@@ -24,6 +24,13 @@ class UserViewModel @Inject constructor(private val userUseCase: GetUserUseCase)
     private var searchJob: Job? = null
     private var lastSearch = ""
 
+    private val _username = mutableStateOf("")
+    val userSearch: State<String> = _username
+
+    fun setUsername(value: String) {
+        _username.value = value
+    }
+
     init {
         searchUser("")
     }

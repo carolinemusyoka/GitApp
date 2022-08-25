@@ -2,7 +2,9 @@ package com.carolmusyoka.gitapp.presentation.components
 
 import androidx.annotation.Dimension
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,7 +40,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.carolmusyoka.gitapp.R
-import com.carolmusyoka.gitapp.data.model.GetUserResponse
+import com.carolmusyoka.gitapp.data.model.*
 import com.carolmusyoka.gitapp.data.uistates.UserUiState
 import com.carolmusyoka.gitapp.navigation.DashDestinations
 import com.carolmusyoka.gitapp.presentation.theme.lightblack
@@ -329,6 +331,60 @@ fun ProfileDetailsScreen(
     }
 }
 
+@OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class)
+@Composable
+fun FollowersCard(
+    followersResponse: GetUserFollowersResponseItem,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+            .height(150.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight().padding(10.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Image(
+                    modifier = Modifier
+                        .height(100.dp)
+                        .width(100.dp)
+                        .clip(CircleShape),
+                    painter = rememberImagePainter(followersResponse.avatar_url),
+                    contentScale = ContentScale.Fit,
+                    contentDescription = "User Avatar"
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 15.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = followersResponse.login ?: "NA",
+                            style = MaterialTheme.typography.h5,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(top = 1.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 @Preview
 @Composable
 fun ProfileDetailsScreenPreview() {
@@ -368,5 +424,33 @@ fun ProfileDetailsScreenPreview() {
             url = "https://api.github.com/users/octocat"),
         navController = rememberNavController()
     )
+}
+
+@Preview
+@Composable
+fun PreviewFollowers(){
+    FollowersCard(followersResponse =
+        GetUserFollowersResponseItem(
+            avatar_url = "https://avatars3.githubusercontent.com/u/17098281?v=4",
+            events_url = "https://api.github.com/users/octocat/events{/privacy}",
+            followers_url = "https://api.github.com/users/octocat/followers",
+            following_url = "https://api.github.com/users/octocat/following{/other_user}",
+            gists_url = "https://api.github.com/users/octocat/gists{/gist_id}",
+            gravatar_id = "",
+            html_url = "",
+            id = 0,
+            login = "Carol Musyoka",
+            node_id = "",
+            organizations_url = "https://api.github.com/users/octocat/orgs",
+            received_events_url = "https://api.github.com/users/octocat/received_events",
+            repos_url = "https://api.github.com/users/octocat/repos",
+            site_admin = true,
+            starred_url = "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+            subscriptions_url = "https://api.github.com/users/octocat/subscriptions",
+            type = "User",
+            url = "https://api.github.com/users/octocat"
+        )
+    )
+
 }
 
