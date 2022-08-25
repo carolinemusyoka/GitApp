@@ -1,6 +1,9 @@
 package com.carolmusyoka.gitapp.presentation.components
 
 import androidx.annotation.Dimension
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -12,9 +15,11 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,6 +53,7 @@ import com.carolmusyoka.gitapp.presentation.theme.lightblack
 import com.carolmusyoka.gitapp.presentation.theme.lightbox
 import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
 import com.carolmusyoka.gitapp.util.UserEvent
+import com.google.accompanist.flowlayout.FlowRow
 
 
 @Composable
@@ -331,13 +338,14 @@ fun ProfileDetailsScreen(
     }
 }
 
-@OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun FollowersCard(
     followersResponse: GetUserFollowersResponseItem,
 ) {
     Card(
-        modifier = Modifier.width(350.dp)
+        modifier = Modifier
+            .width(350.dp)
             .height(100.dp)
             .padding(10.dp),
         shape = RoundedCornerShape(10.dp),
@@ -346,7 +354,8 @@ fun FollowersCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight().padding(10.dp),
+                .wrapContentHeight()
+                .padding(10.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Row(
@@ -392,7 +401,8 @@ fun FollowingCard(
     followingResponse: GetUserFollowingResponseItem,
 ) {
     Card(
-        modifier = Modifier.width(350.dp)
+        modifier = Modifier
+            .width(350.dp)
             .height(100.dp)
             .padding(10.dp),
         shape = RoundedCornerShape(10.dp),
@@ -401,7 +411,8 @@ fun FollowingCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight().padding(10.dp),
+                .wrapContentHeight()
+                .padding(10.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Row(
@@ -438,8 +449,120 @@ fun FollowingCard(
             }
         }
     }
-
 }
+
+@OptIn(ExperimentalCoilApi::class, ExperimentalUnitApi::class, ExperimentalMaterialApi::class)
+@Composable
+fun RepositoryCard(
+    repositoriesResponseItem: GetUserRepositoriesResponseItem,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val extraPadding by animateDpAsState(
+        if (expanded) 40.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
+    Card(
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+        shape = RoundedCornerShape(10.dp),
+        elevation = 15.dp
+    ) {
+        Row(modifier = Modifier.padding(24.dp)) {
+            Column(modifier = Modifier
+                .weight(1f)
+                .padding(bottom = extraPadding.coerceAtLeast(0.dp))
+            ) {
+                Text(
+                    modifier = Modifier.padding(top = 8.dp),
+                    text = repositoriesResponseItem.name,
+                    style = MaterialTheme.typography.body1.copy(
+                        fontWeight = FontWeight.Bold
+                    ))
+                if (expanded){
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // description that wraps its content
+                    Text(
+                        text = repositoriesResponseItem.description ?: "NA",
+                        style = MaterialTheme.typography.body2,
+                        maxLines = 10,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_star),
+                             contentDescription = "Star Icon")
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Text(
+                            text =  repositoriesResponseItem.stargazers_count.toString(),
+                            maxLines = 1,
+                            fontWeight = FontWeight.W500,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = TextUnit(value = 14F, type = TextUnitType.Sp),
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_git_icon),
+                            contentDescription = "Star Icon")
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Text(
+                            text =  repositoriesResponseItem.forks.toString(),
+                            maxLines = 1,
+                            fontWeight = FontWeight.W500,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = TextUnit(value = 14F, type = TextUnitType.Sp),
+                        )
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Icon(
+                            Icons.Filled.Visibility,
+                            contentDescription = "Watchers")
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Text(
+                            text =  repositoriesResponseItem.watchers_count.toString(),
+                            maxLines = 1,
+                            fontWeight = FontWeight.W500,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = TextUnit(value = 14F, type = TextUnitType.Sp),
+                        )
+                    }
+                    // list of chips
+                    FlowRow(
+                        mainAxisSpacing = 5.dp,
+
+                    ) {
+                        for (chip in repositoriesResponseItem.topics) {
+                            Chip(
+                                onClick = { /* Do something! */ },
+                                colors = ChipDefaults.chipColors(
+                                    backgroundColor = Color(0xff9ed1e1),
+                                    contentColor = Color.Black
+                                )
+                            ) {
+                                Text(chip)
+                            }
+                        }
+                    }
+                }
+            }
+            IconButton(onClick = { expanded = !expanded }
+            ) {
+                Icon(
+                    imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                    contentDescription = if (expanded) {
+                        "Collapse"
+                    } else {
+                        "Expand"
+                    }
+                )
+            }
+        }
+    }
+}
+
 
 @Preview
 @Composable
@@ -463,8 +586,8 @@ fun ProfileDetailsScreenPreview() {
             html_url = "",
             id = 0,
             location = "Nairobi, Kenya",
-            login = "",
-            name = "",
+            login = "carolinemusyoka",
+            name = "Carol Musyoka",
             node_id = "",
             organizations_url = "https://api.github.com/users/octocat/orgs",
             public_gists = 0,
@@ -508,5 +631,117 @@ fun PreviewFollowers(){
         )
     )
 
+}
+
+@Preview
+@Composable
+fun RepositoryPreview(){
+    RepositoryCard(repositoriesResponseItem =
+        GetUserRepositoriesResponseItem(
+            allow_forking = true,
+            archive_url = "",
+            archived = false,
+            assignees_url = "",
+            blobs_url = "",
+            branches_url = "",
+            clone_url = "",
+            collaborators_url = "",
+            comments_url = "",
+            commits_url = "",
+            compare_url = "",
+            contents_url = "",
+            contributors_url = "",
+            created_at = "",
+            default_branch = "",
+            deployments_url = "",
+            description = " ",
+            disabled = false,
+            downloads_url = "",
+            events_url = "",
+            fork = false,
+            forks = 10,
+            forks_count = 10,
+            forks_url = "",
+            full_name = "",
+            git_commits_url = "",
+            git_refs_url = "",
+            git_tags_url = "",
+            git_url = "",
+            has_downloads = false,
+            has_issues = false,
+            has_pages = false,
+            has_projects = false,
+            has_wiki = false,
+            homepage  = "",
+            hooks_url = "",
+            html_url = "",
+            id = 1,
+            is_template = false,
+            issue_comment_url = "",
+            issue_events_url = "",
+            issues_url = "",
+            keys_url = "",
+            labels_url = "",
+            language = "",
+            languages_url = "",
+            license = License(
+                key = "",
+                name = "",
+                node_id = "",
+                spdx_id = "",
+                url = ""
+            ),
+            merges_url = "",
+            milestones_url = "",
+            mirror_url = "",
+            name = "2048TheGame",
+            node_id = "",
+            notifications_url = "",
+            open_issues = 0,
+            open_issues_count = 0,
+            owner = Owner(
+                avatar_url = "",
+                events_url = "",
+                followers_url = "",
+                following_url = "",
+                gists_url = "",
+                gravatar_id = "",
+                html_url = "",
+                id = 0,
+                login = "",
+                node_id = "",
+                organizations_url = "",
+                received_events_url = "",
+                repos_url = "",
+                site_admin = false,
+                starred_url = "",
+                subscriptions_url = "",
+                type = "",
+                url = ""
+            ),
+            private = false,
+            pulls_url = "",
+            pushed_at = "",
+            releases_url = "",
+            size = 0,
+            ssh_url = "",
+            stargazers_count = 30,
+            stargazers_url = "",
+            statuses_url = "",
+            subscribers_url = "",
+            subscription_url = "",
+            svn_url = "",
+            tags_url = "",
+            teams_url = "",
+            topics = listOf<String>(),
+            trees_url = "",
+            updated_at = "",
+            url = "",
+            visibility = "",
+            watchers = 0,
+            watchers_count = 0,
+            web_commit_signoff_required = false
+        )
+    )
 }
 

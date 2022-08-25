@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,11 +28,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.carolmusyoka.gitapp.data.model.GetUserResponse
-import com.carolmusyoka.gitapp.navigation.PagerItem
 import com.carolmusyoka.gitapp.presentation.components.FollowersCard
 import com.carolmusyoka.gitapp.presentation.components.FollowingCard
+import com.carolmusyoka.gitapp.presentation.components.RepositoryCard
 import com.carolmusyoka.gitapp.presentation.viewmodel.FollowersViewModel
 import com.carolmusyoka.gitapp.presentation.viewmodel.FollowingViewModel
+import com.carolmusyoka.gitapp.presentation.viewmodel.RepositoryViewModel
 import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
@@ -38,9 +41,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class, ExperimentalPagerApi::class)
 @Composable
 fun UserDetailsScreen(userResponse: GetUserResponse,
-                      userViewModel: UserViewModel = hiltViewModel(),
-                      followersViewModel: FollowersViewModel = hiltViewModel(), followingViewModel: FollowingViewModel = hiltViewModel()) {
-    val tabs = listOf(PagerItem.Followers, PagerItem.Following, PagerItem.Repositories, PagerItem.Gists)
+                      repositoryViewModel: RepositoryViewModel = hiltViewModel(),
+                      followersViewModel: FollowersViewModel = hiltViewModel(),
+                      followingViewModel: FollowingViewModel = hiltViewModel()) {
+    val tabs = listOf(PagerItem.Followers, PagerItem.Following, PagerItem.Repositories)
     val pagerState = rememberPagerState()
         Column(
             modifier = Modifier
@@ -196,7 +200,7 @@ fun UserDetailsScreen(userResponse: GetUserResponse,
                 )
             }
             Tabs(tabs = tabs, pagerState = pagerState)
-            TabsContent(tabs = tabs, pagerState = pagerState, userViewModel, followersViewModel,  followingViewModel, userResponse.login ?: "")
+            TabsContent(tabs = tabs, pagerState = pagerState, repositoryViewModel, followersViewModel,  followingViewModel, userResponse.login ?: "")
         }
 }
 
@@ -204,11 +208,10 @@ fun UserDetailsScreen(userResponse: GetUserResponse,
 @Composable
 fun TabsContent(tabs: List<PagerItem>,
                 pagerState: PagerState,
-                userViewModel: UserViewModel,
+                repositoryViewModel: RepositoryViewModel,
                 followersViewModel: FollowersViewModel,
                 followingViewModel: FollowingViewModel,
                 username: String) {
-    val scrollState = rememberScrollState()
     val followers = remember{
         followersViewModel.getFollowers(username)
         followersViewModel.followers
@@ -217,6 +220,11 @@ fun TabsContent(tabs: List<PagerItem>,
         followingViewModel.getFollowing(username)
         followingViewModel.following
     }.collectAsState()
+    val repositories = remember{
+        repositoryViewModel.getRepositories(username)
+        repositoryViewModel.repositories
+    }.collectAsState()
+
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
         Column(
             modifier = Modifier.fillMaxSize()
@@ -253,26 +261,29 @@ fun TabsContent(tabs: List<PagerItem>,
                                 }
                             }
                         }
-                        followers.value.error -> {
+                        following.value.error -> {
                         }
                     }
                 }
             }
+            if (page == 2){
+                LazyColumn {
+                    when {
+                        repositories.value.isLoading -> {
 
-//            Text(
-//                text = tabs[currentPage].title,
-//                style = MaterialTheme.typography.h2
-//            )
-//            Spacer(modifier = Modifier.height(10.dp))
-//            Text(
-//                text = tabs[currentPage].title,
-//                style = MaterialTheme.typography.h4
-//            )
-//            Spacer(modifier = Modifier.height(10.dp))
-//            Text(
-//                text = tabs[currentPage].title,
-//                style = MaterialTheme.typography.body1
-//            )
+                        }
+                        repositories.value.data != null -> {
+                            items(repositories.value.data!!.size) { repository ->
+                                repositories.value.data?.get(repository)?.let {
+                                    RepositoryCard(it)
+                                }
+                            }
+                        }
+                        repositories.value.error -> {
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -298,7 +309,7 @@ fun Tabs(tabs: List<PagerItem>, pagerState: PagerState) {
                 text = { Text(text = tab.title ,maxLines = 1,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
-                    fontSize = TextUnit(value = 10F, type = TextUnitType.Sp)) },
+                    fontSize = TextUnit(value = 12F, type = TextUnitType.Sp)) },
                 selected = pagerState.currentPage == index,
                 onClick = {
                     scope.launch {
@@ -356,9 +367,14 @@ fun TabsPreview() {
     val tabs = listOf(
         PagerItem.Followers,
         PagerItem.Following,
-        PagerItem.Repositories,
-        PagerItem.Gists
+        PagerItem.Repositories
     )
     val pagerState = rememberPagerState()
     Tabs(tabs = tabs, pagerState = pagerState)
+}
+
+sealed class PagerItem(var title:String) {
+    object Followers: PagerItem("Followers")
+    object Following: PagerItem("Following")
+    object Repositories: PagerItem("Repos")
 }
