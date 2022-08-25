@@ -74,7 +74,6 @@ fun HomeScreen(
         content = { padding ->
             Box(modifier = modifier.fillMaxSize()) {
                 state.data?.let {
-                    userViewModel.setUsername(it.login.toString())
                     ProfileDetailsScreen(it, navController = navController)
                 }
             }

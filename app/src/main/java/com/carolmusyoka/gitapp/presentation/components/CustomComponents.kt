@@ -164,7 +164,7 @@ fun ProfileDetailsScreen(
             .size(
                 //width, fill the max width of the screen in dp units
                 width = 400.dp,
-                height = 400.dp,
+                height = 450.dp,
             )
             .padding(15.dp),
         shape = RoundedCornerShape(12.dp),
@@ -337,10 +337,11 @@ fun FollowersCard(
     followersResponse: GetUserFollowersResponseItem,
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth()
-            .height(150.dp)
+        modifier = Modifier.width(350.dp)
+            .height(100.dp)
             .padding(10.dp),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
+        elevation = 10.dp
     ) {
         Column(
             modifier = Modifier
@@ -373,7 +374,62 @@ fun FollowersCard(
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = followersResponse.login ?: "NA",
-                            style = MaterialTheme.typography.h5,
+                            style = MaterialTheme.typography.body1,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(top = 1.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class)
+@Composable
+fun FollowingCard(
+    followingResponse: GetUserFollowingResponseItem,
+) {
+    Card(
+        modifier = Modifier.width(350.dp)
+            .height(100.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp),
+        elevation = 10.dp
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight().padding(10.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Image(
+                    modifier = Modifier
+                        .height(100.dp)
+                        .width(100.dp)
+                        .clip(CircleShape),
+                    painter = rememberImagePainter(followingResponse.avatar_url),
+                    contentScale = ContentScale.Fit,
+                    contentDescription = "User Avatar"
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 15.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = followingResponse.login ?: "NA",
+                            style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(top = 1.dp)
                         )

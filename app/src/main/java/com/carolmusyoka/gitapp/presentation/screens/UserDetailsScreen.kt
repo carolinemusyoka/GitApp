@@ -28,14 +28,18 @@ import coil.compose.rememberImagePainter
 import com.carolmusyoka.gitapp.data.model.GetUserResponse
 import com.carolmusyoka.gitapp.navigation.PagerItem
 import com.carolmusyoka.gitapp.presentation.components.FollowersCard
+import com.carolmusyoka.gitapp.presentation.components.FollowingCard
 import com.carolmusyoka.gitapp.presentation.viewmodel.FollowersViewModel
+import com.carolmusyoka.gitapp.presentation.viewmodel.FollowingViewModel
 import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class, ExperimentalPagerApi::class)
 @Composable
-fun UserDetailsScreen(userResponse: GetUserResponse, userViewModel: UserViewModel = hiltViewModel(), followersViewModel: FollowersViewModel = hiltViewModel()) {
+fun UserDetailsScreen(userResponse: GetUserResponse,
+                      userViewModel: UserViewModel = hiltViewModel(),
+                      followersViewModel: FollowersViewModel = hiltViewModel(), followingViewModel: FollowingViewModel = hiltViewModel()) {
     val tabs = listOf(PagerItem.Followers, PagerItem.Following, PagerItem.Repositories, PagerItem.Gists)
     val pagerState = rememberPagerState()
         Column(
@@ -192,18 +196,26 @@ fun UserDetailsScreen(userResponse: GetUserResponse, userViewModel: UserViewMode
                 )
             }
             Tabs(tabs = tabs, pagerState = pagerState)
-            TabsContent(tabs = tabs, pagerState = pagerState, userViewModel, followersViewModel, userResponse.login ?: "")
+            TabsContent(tabs = tabs, pagerState = pagerState, userViewModel, followersViewModel,  followingViewModel, userResponse.login ?: "")
         }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabsContent(tabs: List<PagerItem>, pagerState: PagerState, userViewModel: UserViewModel, followersViewModel: FollowersViewModel, username: String) {
+fun TabsContent(tabs: List<PagerItem>,
+                pagerState: PagerState,
+                userViewModel: UserViewModel,
+                followersViewModel: FollowersViewModel,
+                followingViewModel: FollowingViewModel,
+                username: String) {
     val scrollState = rememberScrollState()
-
     val followers = remember{
         followersViewModel.getFollowers(username)
         followersViewModel.followers
+    }.collectAsState()
+    val following = remember{
+        followingViewModel.getFollowing(username)
+        followingViewModel.following
     }.collectAsState()
     HorizontalPager(state = pagerState, count = tabs.size) { page ->
         Column(
@@ -224,6 +236,24 @@ fun TabsContent(tabs: List<PagerItem>, pagerState: PagerState, userViewModel: Us
                         }
                         followers.value.error ->{
 
+                        }
+                    }
+                }
+            }
+            if (page == 1){
+                LazyColumn {
+                    when {
+                        following.value.isLoading -> {
+
+                        }
+                        following.value.data != null -> {
+                            items(following.value.data!!.size) { userfollowing ->
+                                following.value.data?.get(userfollowing)?.let {
+                                    FollowingCard(it)
+                                }
+                            }
+                        }
+                        followers.value.error -> {
                         }
                     }
                 }
