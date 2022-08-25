@@ -31,7 +31,7 @@ fun MainNavGraph(
         composable(
             route = MainScreen.SPLASH.route,
         ){
-            SplashScreen(navToHomeScreen = {navController.navigate((DashDestinations.HOME_ROUTE))})
+            SplashScreen(navToHomeScreen = {navController.navigate((DashDestinations.HomeRoute.route))})
         }
         composable(
             route = MainScreen.HOME.route

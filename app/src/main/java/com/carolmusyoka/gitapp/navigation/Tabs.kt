@@ -31,15 +31,12 @@ enum class HomeTabs(
 fun NavGraphBuilder.addHomeGraph(
     navController: NavController,
     navToDetails: () -> Unit,
-    openDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ){
     composable(HomeTabs.HOME.route){
         HomeScreen(
-            navToProfile = {},
-            openDrawer = openDrawer,
-            navToUser = {},
-            modifier = modifier
+            modifier = modifier,
+            navController = navController,
         )
     }
     composable(HomeTabs.SEARCH.route){

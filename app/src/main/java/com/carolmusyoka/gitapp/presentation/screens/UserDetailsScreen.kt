@@ -1,181 +1,38 @@
-package com.carolmusyoka.gitapp.presentation.components
+package com.carolmusyoka.gitapp.presentation.screens
 
-import androidx.annotation.Dimension
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.Dimension.Companion.fillToConstraints
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.carolmusyoka.gitapp.R
 import com.carolmusyoka.gitapp.data.model.GetUserResponse
-import com.carolmusyoka.gitapp.data.uistates.UserUiState
-import com.carolmusyoka.gitapp.navigation.DashDestinations
-import com.carolmusyoka.gitapp.presentation.theme.lightblack
-import com.carolmusyoka.gitapp.presentation.theme.lightbox
-import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
-import com.carolmusyoka.gitapp.util.UserEvent
 
-
+@OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class)
 @Composable
-fun CustomSearch(
-    state: UserUiState,
-    userViewModel: UserViewModel,
-){
-    val localFocusManager = LocalFocusManager.current
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(90.dp)
-            .padding(top = 30.dp)
-    ) { TextField(
-        value = state.searchString,
-        shape = RoundedCornerShape(12.dp),
-        label = { Text("Search") },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                // if the search string is empty, validation error shows
-                if (state.searchString.isBlank()) {
-                    userViewModel.onEvent(
-                        UserEvent.SetValidationError(
-                            "Search can't be empty"
-                        )
-                    )
-                } else {
-                    userViewModel.onEvent(UserEvent.SearchUser(state.searchString))
-                    userViewModel.onEvent(UserEvent.SetSearchText(state.searchString))
-                }
-                localFocusManager.clearFocus()
-            }
-        ),
-        onValueChange = {
-            // users can't search the string that has more than 150 chars
-            if (it.length <= 150) {
-                userViewModel.onEvent(UserEvent.SetSearchText(it))
-            } },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Outlined.Search,
-                contentDescription = null,
-                tint = lightblack,
-            )
-        },
-        trailingIcon = {
-            if (state.searchString.isNotEmpty()) {
-                IconButton(
-                    onClick = {
-                        userViewModel.onEvent(
-                            UserEvent.ClearSearchText
-                        )
-                        localFocusManager.clearFocus()
-                    }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Close,
-                        contentDescription = null
-                    )
-                }
-            }
-        },
-        placeholder = {
-            Text(text = "Search user")
-        },
-        modifier = Modifier
-            .weight(0.85f),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = lightbox,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ))
-    }
-}
-
-@Composable
-fun LoadingLottieAnimation(){
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        iterations = Int.MAX_VALUE,
-        isPlaying = true
-    )
-    Surface(
-        color = Color.White,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            LottieAnimation(
-                composition = composition,
-                progress = progress,
-                modifier = Modifier.height(300.dp)
-            )
-
-        }
-    }
-}
-
-@OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
-@Composable
-fun ProfileDetailsScreen(
-    userResponse: GetUserResponse,
-    navController: NavController
-) {
-
-    // Card
-    Card(
-        modifier = Modifier
-            .size(
-                //width, fill the max width of the screen in dp units
-                width = 400.dp,
-                height = 400.dp,
-            )
-            .padding(15.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 5.dp,
-        onClick = {
-            navController.navigate(DashDestinations.UserDetail.createRoute(userResponse.login?:""))
-        }
-    ){
+fun UserDetailsScreen(userResponse: GetUserResponse) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(15.dp),
-            horizontalAlignment = Alignment.Start
+                .padding(16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -262,20 +119,20 @@ fun ProfileDetailsScreen(
             }
             userResponse.location.let {
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(Icons.Outlined.LocationOn, contentDescription = "Icon Location")
-                Spacer(modifier = Modifier.width(7.dp))
-                Text(
-                    text = userResponse.location ?: "NA",
-                    maxLines = 1,
-                    fontWeight = FontWeight.W500,
-                    overflow = TextOverflow.Ellipsis,
-                    fontSize = TextUnit(value = 14F, type = TextUnitType.Sp),
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Outlined.LocationOn, contentDescription = "Icon Location")
+                    Spacer(modifier = Modifier.width(7.dp))
+                    Text(
+                        text = userResponse.location ?: "NA",
+                        maxLines = 1,
+                        fontWeight = FontWeight.W500,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = TextUnit(value = 14F, type = TextUnitType.Sp),
+                    )
+                }
             }
-        }
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -326,14 +183,12 @@ fun ProfileDetailsScreen(
                 )
             }
         }
-    }
 }
 
 @Preview
 @Composable
-fun ProfileDetailsScreenPreview() {
-    ProfileDetailsScreen(
-        userResponse = GetUserResponse(
+fun PreviewDetailScreen(){
+    UserDetailsScreen(userResponse = GetUserResponse(
             avatar_url = "https://avatars3.githubusercontent.com/u/17098281?v=4",
             bio = "I am a software engineer and a full stack developer. I am passionate about building products that people love to use.",
             blog = "https://",
@@ -355,8 +210,8 @@ fun ProfileDetailsScreenPreview() {
             name = "",
             node_id = "",
             organizations_url = "https://api.github.com/users/octocat/orgs",
-            public_gists = 0,
-            public_repos = 0,
+            public_gists = 60,
+            public_repos = 100,
             received_events_url = "https://api.github.com/users/octocat/received_events",
             repos_url = "https://api.github.com/users/octocat/repos",
             site_admin = true,
@@ -365,8 +220,6 @@ fun ProfileDetailsScreenPreview() {
             twitter_username = "",
             type = "User",
             updated_at = "2020-01-01T00:00:00Z",
-            url = "https://api.github.com/users/octocat"),
-        navController = rememberNavController()
+            url = "https://api.github.com/users/octocat")
     )
 }
-

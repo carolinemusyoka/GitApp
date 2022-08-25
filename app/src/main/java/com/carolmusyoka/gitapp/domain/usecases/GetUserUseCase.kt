@@ -7,5 +7,5 @@ import com.carolmusyoka.gitapp.util.NetworkResult
 import javax.inject.Inject
 
 class GetUserUseCase @Inject constructor(private val mainRepository: MainRepository) {
-    suspend fun invoke(username: String): NetworkResult<GetUserResponse> = mainRepository.getUser(username)
+    suspend fun invoke(user: String): NetworkResult<GetUserResponse> = mainRepository.getUser(user)
 }

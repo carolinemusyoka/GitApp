@@ -22,13 +22,6 @@ fun DashboardNav(
 
     Scaffold (
         scaffoldState = scaffoldState,
-        backgroundColor = Color.White,
-        drawerBackgroundColor = Color.White,
-
-        drawerContent = {
-            // DrawerContent
-        },
-
         bottomBar = {
             GitAppBottomBar(
                 navController = navController, tabs = tabs )
@@ -36,10 +29,7 @@ fun DashboardNav(
             ){ innerPadding ->
         NavGraph(
             modifier = Modifier.padding(innerPadding),
-            navController = navController,
-            openDrawer = { scope.launch {
-                scaffoldState.drawerState.open()
-            }}
+            navController = navController
         )
 
     }
