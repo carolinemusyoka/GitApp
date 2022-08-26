@@ -148,7 +148,7 @@ fun LoadingLottieAnimation(){
             LottieAnimation(
                 composition = composition,
                 progress = progress,
-                modifier = Modifier.height(300.dp)
+                modifier = Modifier.height(400.dp).width(400.dp)
             )
 
         }

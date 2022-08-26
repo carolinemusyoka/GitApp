@@ -49,16 +49,16 @@ fun HomeScreen(
                             withStyle(
                                 style = SpanStyle(
                                     color = Color.Black,
-                                    fontSize = 24.sp
+                                    fontSize = 29.sp
                                 )
                             ) {
                                 append("Search for\n")
                             }
                             withStyle(
                                 style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
+                                    fontWeight = FontWeight.ExtraBold,
                                     color = Color.Black,
-                                    fontSize = 24.sp
+                                    fontSize = 29.sp
                                 )
                             ) {
                                 append("Users on GitHub")

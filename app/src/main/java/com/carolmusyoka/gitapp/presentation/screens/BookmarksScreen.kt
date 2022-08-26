@@ -40,6 +40,7 @@ fun BookmarksScreen(
             CustomTopBar(
                 icon = Icons.Filled.Delete,
                 title = "Bookmarks",
+                pressBack = {navController.navigateUp()},
                 onClick = {
                     coroutineScope.launch {
                         if(bookmarkList.value.isNotEmpty()) {
