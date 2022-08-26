@@ -22,6 +22,6 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
           name: Run Android tests
-          command: ./gradlew androidApp:testDebugUnitTest
+          command: ./gradlew app:test
             - android/save-gradle-cache
             - android/save-build-cache
