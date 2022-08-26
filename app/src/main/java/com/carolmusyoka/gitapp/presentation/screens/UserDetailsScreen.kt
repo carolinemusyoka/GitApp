@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.carolmusyoka.gitapp.data.model.GetUserResponse
+import com.carolmusyoka.gitapp.presentation.components.CustomTopBar
 import com.carolmusyoka.gitapp.presentation.components.FollowersCard
 import com.carolmusyoka.gitapp.presentation.components.FollowingCard
 import com.carolmusyoka.gitapp.presentation.components.RepositoryCard
@@ -38,9 +39,37 @@ import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
+
+@Composable
+fun UserDetailsScreen(
+    userResponse: GetUserResponse,
+    repositoryViewModel: RepositoryViewModel = hiltViewModel(),
+    followersViewModel: FollowersViewModel = hiltViewModel(),
+    followingViewModel: FollowingViewModel = hiltViewModel(),
+    navBack: () -> Unit
+){
+    Scaffold(
+        topBar = {
+            CustomTopBar(
+                title = userResponse.login,
+                pressBack = navBack
+            )
+        },
+        backgroundColor = Color.White,
+        content = {
+            Details(
+                userResponse = userResponse,
+                repositoryViewModel = repositoryViewModel,
+                followersViewModel = followersViewModel,
+                followingViewModel = followingViewModel
+            )
+        }
+    )
+}
+
 @OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class, ExperimentalPagerApi::class)
 @Composable
-fun UserDetailsScreen(userResponse: GetUserResponse,
+fun Details(userResponse: GetUserResponse,
                       repositoryViewModel: RepositoryViewModel = hiltViewModel(),
                       followersViewModel: FollowersViewModel = hiltViewModel(),
                       followingViewModel: FollowingViewModel = hiltViewModel()) {
@@ -357,6 +386,7 @@ fun PreviewDetailScreen(){
             type = "User",
             updated_at = "2020-01-01T00:00:00Z",
             url = "https://api.github.com/users/octocat")
+    , navBack = {}
     )
 }
 

@@ -19,11 +19,14 @@ import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -559,6 +562,51 @@ fun RepositoryCard(
                     }
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun CustomTopBar(
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    pressBack: () -> Unit = {},
+    pressBookmark: () -> Unit = {},
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        IconButtonMenu(icon = Icons.Rounded.ArrowBackIosNew, onClick = pressBack)
+        if (title != null) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h6,
+            )
+        }
+        IconButtonMenu(icon = Icons.Rounded.Favorite, onClick = pressBookmark)
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun IconButtonMenu(icon: ImageVector, onClick: () -> Unit= {}) {
+    Surface(
+        onClick = onClick,
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colors.surface
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.size(44.dp)
+        ) {
+            Icon(
+                icon,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSurface,
+                modifier = Modifier.size(20.dp)
+            )
         }
     }
 }

@@ -54,7 +54,7 @@ fun NavGraph(
                 userViewModel.user
             }.collectAsState()
 
-            user.value.data?.let { UserDetailsScreen(userResponse = it) }
+            user.value.data?.let { UserDetailsScreen(userResponse = it, navBack = {navController.navigateUp()}) }
         }
     }
 }
