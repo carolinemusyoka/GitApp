@@ -37,9 +37,7 @@ fun MainNavGraph(
             route = MainScreen.HOME.route
         ){
             DashboardNav(
-
             )
-
         }
     }
 }
