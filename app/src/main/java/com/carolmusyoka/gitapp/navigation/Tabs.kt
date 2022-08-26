@@ -2,9 +2,9 @@ package com.carolmusyoka.gitapp.navigation
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -14,9 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.carolmusyoka.gitapp.presentation.screens.FollowingScreen
+import com.carolmusyoka.gitapp.presentation.screens.BookmarksScreen
 import com.carolmusyoka.gitapp.presentation.screens.HomeScreen
-import com.carolmusyoka.gitapp.presentation.screens.ProfileScreen
 
 enum class HomeTabs(
     val title: String,
@@ -24,8 +23,7 @@ enum class HomeTabs(
     val route: String
 ){
     HOME("Home", Icons.Rounded.Home, "tabs/home"),
-    SEARCH("Search", Icons.Rounded.Search, "tabs/search"),
-    PROFILE("Profile", Icons.Rounded.Person, "tabs/profile")
+    BOOKMARK("Bookmarks", Icons.Rounded.Favorite, "tabs/bookmark"),
 }
 
 fun NavGraphBuilder.addHomeGraph(
@@ -39,15 +37,8 @@ fun NavGraphBuilder.addHomeGraph(
             navController = navController,
         )
     }
-    composable(HomeTabs.SEARCH.route){
-        FollowingScreen(
-
-        )
-    }
-    composable(HomeTabs.PROFILE.route){
-        ProfileScreen(
-
-        )
+    composable(HomeTabs.BOOKMARK.route){
+        BookmarksScreen(navController = navController)
     }
 }
 

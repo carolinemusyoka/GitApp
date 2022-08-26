@@ -1,13 +1,9 @@
 package com.carolmusyoka.gitapp.presentation.components
 
-import androidx.annotation.Dimension
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +16,7 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +26,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,7 +34,6 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.Dimension.Companion.fillToConstraints
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
@@ -569,23 +563,24 @@ fun RepositoryCard(
 @Composable
 fun CustomTopBar(
     modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
     title: String? = null,
     pressBack: () -> Unit = {},
-    pressBookmark: () -> Unit = {},
+    onClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth()
     ) {
-        IconButtonMenu(icon = Icons.Rounded.ArrowBackIosNew, onClick = pressBack)
+        IconButtonMenu(icon = Icons.Rounded.ArrowBackIosNew, onClick = { pressBack() })
         if (title != null) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.h6,
             )
         }
-        IconButtonMenu(icon = Icons.Rounded.Favorite, onClick = pressBookmark)
+        icon?.let { IconButtonMenu(icon = it, onClick = onClick ) }
     }
 }
 

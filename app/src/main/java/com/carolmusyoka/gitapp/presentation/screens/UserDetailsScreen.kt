@@ -1,22 +1,26 @@
 package com.carolmusyoka.gitapp.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,14 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.carolmusyoka.gitapp.data.model.GetUserResponse
-import com.carolmusyoka.gitapp.presentation.components.CustomTopBar
-import com.carolmusyoka.gitapp.presentation.components.FollowersCard
-import com.carolmusyoka.gitapp.presentation.components.FollowingCard
-import com.carolmusyoka.gitapp.presentation.components.RepositoryCard
-import com.carolmusyoka.gitapp.presentation.viewmodel.FollowersViewModel
-import com.carolmusyoka.gitapp.presentation.viewmodel.FollowingViewModel
-import com.carolmusyoka.gitapp.presentation.viewmodel.RepositoryViewModel
-import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
+import com.carolmusyoka.gitapp.presentation.components.*
+import com.carolmusyoka.gitapp.presentation.viewmodel.*
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
@@ -46,13 +44,30 @@ fun UserDetailsScreen(
     repositoryViewModel: RepositoryViewModel = hiltViewModel(),
     followersViewModel: FollowersViewModel = hiltViewModel(),
     followingViewModel: FollowingViewModel = hiltViewModel(),
+    roomViewModel: RoomViewModel = hiltViewModel(),
     navBack: () -> Unit
 ){
+    val bookmarked = roomViewModel.isBookmarked(userResponse.login ?: "").observeAsState(false)
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             CustomTopBar(
                 title = userResponse.login,
-                pressBack = navBack
+                pressBack = navBack,
+                // change states
+                icon = Icons.Rounded.Bookmark,
+                onClick = {
+                    coroutineScope.launch {
+                        if (bookmarked.value) {
+                            roomViewModel.deleteBookmark(userResponse, coroutineScope)
+                            Toast.makeText(context, "Removed from bookmarks", Toast.LENGTH_SHORT).show()
+                        } else {
+                            roomViewModel.addBookmark(userResponse, coroutineScope)
+                            Toast.makeText(context, "Added to bookmarks", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             )
         },
         backgroundColor = Color.White,
