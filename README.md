@@ -10,7 +10,6 @@ built with Compose, MVVM pattern as well as other architectural components and l
 - [Installation](#installation)
 - [UserFlow](#userflow)
 - [Architecture](#architecture)
-- [Testing](#testing)
 - [Libraries](#libraies)
 
 ## Installation
@@ -25,6 +24,8 @@ The app shows a search screen, on the home page with a search bar. A user is abl
 When a user clicks on a repository, they are able to view the repository's description, stars, fork and watchers count and the topics under the repository.
 
 
+
+
 <img src="images/1.jpg" width=150/> <img src="images/2.jpg" width=150/> <img src="images/3.jpg" width=150/> <img src="images/4.jpg" width=150/>
 <img src="images/5.jpg" width=150/> <img src="images/6.jpg" width=150/> <img src="images/7.jpg" width=150/> <img src="images/8.jpg" width=150/>
 <img src="images/9.jpg" width=150/> <img src="images/10.jpg" width=150/> <img src="images/11.jpg" width=150/> <img src="images/12.jpg" width=150/>
@@ -33,14 +34,6 @@ When a user clicks on a repository, they are able to view the repository's descr
 The app is built using the MVVM architectural pattern. The app has composable screens that communicates to ViewModel which in turn communicates to
 the usecase which communicates with Repository to get data.
 
-## Testing
-
-```- run:
-name: Run Android tests
-command: ./gradlew app:test
-command: ./gradlew app:test
-- store_test_results:
-path: app/build/test-results```
 
 ## Libraries
 - [Jetpack](https://developer.android.com/jetpack)🚀
