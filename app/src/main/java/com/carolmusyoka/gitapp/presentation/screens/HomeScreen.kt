@@ -20,9 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.carolmusyoka.gitapp.presentation.components.CustomSearch
-import com.carolmusyoka.gitapp.presentation.components.LoadingLottieAnimation
-import com.carolmusyoka.gitapp.presentation.components.ProfileDetailsScreen
+import com.carolmusyoka.gitapp.presentation.components.*
 import com.carolmusyoka.gitapp.presentation.viewmodel.UserViewModel
 
 
@@ -78,7 +76,7 @@ fun HomeScreen(
                 }
             }
             // Display loading state of UI
-            if (state.isLoading) {
+            if (state.isLoading || state.data == null) {
                 Column(
                     modifier = modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -91,12 +89,12 @@ fun HomeScreen(
             }
             if (state.error) {
                 Column(
-                    modifier = modifier.fillMaxSize(),
+                    modifier = modifier.fillMaxSize().padding(20.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(modifier = modifier.fillMaxSize()) {
-                        LoadingLottieAnimation()
+                        ErrorLottieAnimation()
                     }
                 }
             }

@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Carol Musyoka/Projects/GitApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/Carol Musyoka/Projects/GitApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/Carol Musyoka/Projects/GitApp/app/src/main/res/drawable/ic_star.xml" value="0.11" />
       </map>
     </option>

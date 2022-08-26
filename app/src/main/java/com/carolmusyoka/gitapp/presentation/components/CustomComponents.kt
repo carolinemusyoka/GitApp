@@ -155,6 +155,59 @@ fun LoadingLottieAnimation(){
     }
 }
 
+@Composable
+fun ErrorLottieAnimation(){
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.error))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = Int.MAX_VALUE,
+        isPlaying = true
+    )
+    Surface(
+        color = Color.White,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier.height(300.dp)
+            )
+
+        }
+    }
+}
+
+@Composable
+fun BookmarkLottieAnimation(){
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.bookmark))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = Int.MAX_VALUE,
+        isPlaying = true
+    )
+    Surface(
+        color = Color.White,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier.height(300.dp)
+            )
+
+        }
+
+    }
+}
+
 @OptIn(ExperimentalUnitApi::class, ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun ProfileDetailsScreen(
