@@ -1,4 +1,4 @@
-package com.carolmusyoka.gitapp.ui.theme
+package com.carolmusyoka.gitapp.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
