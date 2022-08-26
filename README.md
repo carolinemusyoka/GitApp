@@ -16,18 +16,18 @@ built with Compose, MVVM pattern as well as other architectural components and l
 ## Installation
 
 This project uses the Gradle build system. To build this project, use the
-`gradlew build` command or use "Import Project" in Android Studio. 
+`gradlew build` command or use "Import Project" in Android Studio.
 
 _You can find the latest apk in the Release section, or you can download from [here]()_
 
 ## UserFlow
-The app shows a search screen, on the home page with a search bar. A user is able to search for a user using their username. The app displays the user's profile. When a user clicks on the profile, the app navigates to a detail screen, which displays the user's followers, following and repositories. 
+The app shows a search screen, on the home page with a search bar. A user is able to search for a user using their username. The app displays the user's profile. When a user clicks on the profile, the app navigates to a detail screen, which displays the user's followers, following and repositories.
 When a user clicks on a repository, they are able to view the repository's description, stars, fork and watchers count and the topics under the repository.
 
 
-<img src="screenshots/1.png" width=300/> <img src="screenshots/2.png" width=300/> <img src="screenshots/3.png" width=300/> <img src="screenshots/4.png" width=300/>
-<img src="screenshots/5.png" width=300/> <img src="screenshots/6.png" width=300/> <img src="screenshots/7.png" width=300/> <img src="screenshots/8.png" width=300/>
-<img src="screenshots/9.png" width=300/> <img src="screenshots/10.png" width=300/> <img src="screenshots/11.png" width=300/> <img src="screenshots/12.png" width=300/>
+<img src="images/1.jpg" width=150/> <img src="images/2.jpg" width=150/> <img src="images/3.jpg" width=150/> <img src="images/4.jpg" width=150/>
+<img src="images/5.jpg" width=150/> <img src="images/6.jpg" width=150/> <img src="images/7.jpg" width=150/> <img src="images/8.jpg" width=150/>
+<img src="images/9.jpg" width=150/> <img src="images/10.jpg" width=150/> <img src="images/11.jpg" width=150/> <img src="images/12.jpg" width=150/>
 
 ## Architecture
 The app is built using the MVVM architectural pattern. The app has composable screens that communicates to ViewModel which in turn communicates to
