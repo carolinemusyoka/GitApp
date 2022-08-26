@@ -170,7 +170,7 @@ fun Details(userResponse: GetUserResponse,
                     Icon(Icons.Outlined.AccountBox, contentDescription = "Icon Company")
                     Spacer(modifier = Modifier.width(7.dp))
                     Text(
-                        text = userResponse.company.toString() ?: "NA",
+                        text = userResponse.company ?: "NA",
                         maxLines = 1,
                         fontWeight = FontWeight.W500,
                         overflow = TextOverflow.Ellipsis,
@@ -213,7 +213,7 @@ fun Details(userResponse: GetUserResponse,
                 Icon(Icons.Outlined.Web, contentDescription = "Icon Company")
                 Spacer(modifier = Modifier.width(7.dp))
                 Text(
-                    text = "@${userResponse.twitter_username}",
+                    text = "@${userResponse.twitter_username ?: "NA"}",
                     maxLines = 1,
                     fontWeight = FontWeight.W500,
                     overflow = TextOverflow.Ellipsis,
