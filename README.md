@@ -4,7 +4,6 @@
 An Android application consuming the [GitHub API](https://developer.github.com/v3/) to search for users on Github, display their followers, following and repositories. The project is
 built with Compose, MVVM pattern as well as other architectural components and libraries.
 
--- add img sheid for min level api, build system, and circleci
 
 ## Table of Contents
 - [Installation](#installation)
