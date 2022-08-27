@@ -23,11 +23,18 @@ The app shows a search screen, on the home page with a search bar. A user is abl
 When a user clicks on a repository, they are able to view the repository's description, stars, fork and watchers count and the topics under the repository.
 
 
-
+### Screenshots
 
 <img src="images/1.jpg" width=150/> <img src="images/2.jpg" width=150/> <img src="images/3.jpg" width=150/> <img src="images/4.jpg" width=150/>
 <img src="images/5.jpg" width=150/> <img src="images/6.jpg" width=150/> <img src="images/7.jpg" width=150/> <img src="images/8.jpg" width=150/>
 <img src="images/9.jpg" width=150/> <img src="images/10.jpg" width=150/> <img src="images/11.jpg" width=150/> <img src="images/12.jpg" width=150/>
+
+### Recording
+
+
+https://user-images.githubusercontent.com/44951692/187005808-59c81eec-103a-46d3-992b-e2bf27de006e.mp4
+
+
 
 ## Architecture
 The app is built using the MVVM architectural pattern. The app has composable screens that communicates to ViewModel which in turn communicates to
