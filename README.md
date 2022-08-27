@@ -16,7 +16,7 @@ built with Compose, MVVM pattern as well as other architectural components and l
 This project uses the Gradle build system. To build this project, use the
 `gradlew build` command or use "Import Project" in Android Studio.
 
-_You can find the latest apk in the Release section, or you can download from [here]()_
+_You can find the latest apk in the Release section, or you can download from [here](https://github.com/carolinemusyoka/GitApp/blob/dev/app/release/git_app.apk)_
 
 ## UserFlow
 The app shows a search screen, on the home page with a search bar. A user is able to search for a user using their username. The app displays the user's profile. When a user clicks on the profile, the app navigates to a detail screen, which displays the user's followers, following and repositories.
