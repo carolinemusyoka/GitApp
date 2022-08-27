@@ -1,5 +1,6 @@
 package com.carolmusyoka.gitapp.presentation.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -8,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
@@ -33,6 +35,7 @@ fun HomeScreen(
 ) {
 
     val state = userViewModel.state.value
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.padding(top = 30.dp),
@@ -95,6 +98,11 @@ fun HomeScreen(
                 ) {
                     Box(modifier = modifier.fillMaxSize()) {
                         ErrorLottieAnimation()
+                        Toast.makeText(
+                            context,
+                            "Error fetching data with that username. Try again.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

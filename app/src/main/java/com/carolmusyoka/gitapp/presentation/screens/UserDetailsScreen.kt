@@ -200,7 +200,7 @@ fun Details(userResponse: GetUserResponse,
                 Icon(Icons.Outlined.Email, contentDescription = "Icon Company")
                 Spacer(modifier = Modifier.width(7.dp))
                 Text(
-                    text = userResponse.email.toString(),
+                    text = userResponse.email ?: "NA",
                     maxLines = 1,
                     fontWeight = FontWeight.W500,
                     overflow = TextOverflow.Ellipsis,
