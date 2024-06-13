@@ -47,6 +47,8 @@ class UserViewModel @Inject constructor(private val userUseCase: GetUserUseCase)
                     searchString = event.search
                 )
             }
+
+            is UserEvent.SetValidationError -> TODO()
         }
     }
 
