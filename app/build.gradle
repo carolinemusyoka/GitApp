@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.kapt'
     id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
@@ -44,7 +45,7 @@ android {
         buildConfig true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
     packagingOptions {
@@ -56,40 +57,51 @@ android {
 }
 
 dependencies {
+    // Compose BOM ensures version compatibility for Compose libraries
+    implementation platform('androidx.compose:compose-bom:2024.10.00')
+
+    // Core libraries
     implementation 'androidx.core:core-ktx:1.13.1'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+
+    // Compose libraries
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.material:material'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.9.3'
 
-    // Accompanist pager library
-    implementation "com.google.accompanist:accompanist-pager:0.21.3-beta"
-    implementation "com.google.accompanist:accompanist-pager-indicators:0.21.3-beta"
-    implementation "com.google.accompanist:accompanist-insets:0.21.3-beta"
-    implementation "com.google.accompanist:accompanist-flowlayout:0.21.3-beta"
+    // Accompanist libraries
+    implementation "com.google.accompanist:accompanist-pager:0.31.3-beta"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.31.3-beta"
+    implementation "com.google.accompanist:accompanist-insets:0.31.3-beta"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.31.3-beta"
 
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    // Material Icons
+    implementation "androidx.compose.material:material-icons-extended"
+
+    // Navigation
     implementation "androidx.navigation:navigation-compose:2.7.7"
+
+    // ConstraintLayout
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
 
-    //Lottie
+    // Lottie animations
     implementation "com.airbnb.android:lottie-compose:5.0.3"
 
-
-    //Retrofit
+    // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10'
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
 
-    //Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0'
-    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    // Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
+    implementation 'androidx.compose.runtime:runtime-livedata'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
     // Room
@@ -98,27 +110,33 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
-    //dagger hilt
-    implementation "com.google.dagger:hilt-android:$hiltVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-    implementation "androidx.hilt:hilt-work:$hiltCompiler"
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.48"
+    kapt "com.google.dagger:hilt-android-compiler:2.48"
+    implementation "androidx.hilt:hilt-work:1.2.0"
     kapt "androidx.hilt:hilt-compiler:1.2.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.2.0'
 
-    // Exo Player Library
+    // ExoPlayer
     implementation "com.google.android.exoplayer:exoplayer:2.19.1"
 
-    //Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    // Coil for image loading
+    implementation 'io.coil-kt:coil-compose:2.4.0'
 
+    // Unit tests
     testImplementation 'junit:junit:4.13.2'
+
+    // Android tests
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Mockito
     def mockito = "5.6.0"
     androidTestImplementation "org.mockito:mockito-core:$mockito"
     testImplementation "org.mockito:mockito-core:$mockito"
     androidTestImplementation "org.mockito:mockito-android:$mockito"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
+    // Compose testing
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4"
+    debugImplementation "androidx.compose.ui:ui-tooling"
 }
